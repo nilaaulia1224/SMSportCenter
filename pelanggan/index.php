@@ -59,7 +59,6 @@ $pelanggan = $stmt->fetchAll();
                         <th>Nama Lengkap</th>
                         <th>No. WhatsApp</th>
                         <th>Email</th>
-                        <th>Alamat</th>
                         <th class="text-center">Aksi</th>
                     </tr>
                 </thead>
@@ -75,7 +74,6 @@ $pelanggan = $stmt->fetchAll();
                                     </a>
                                 </td>
                                 <td><?= htmlspecialchars($row['email']) ?></td>
-                                <td><?= htmlspecialchars($row['alamat']) ?></td>
                                 <td class="text-center">
                                     <a href="edit.php?id=<?= $row['id_pelanggan'] ?>" class="btn btn-sm btn-outline-primary" title="Edit">
                                         <i class="bi bi-pencil"></i>
@@ -88,7 +86,7 @@ $pelanggan = $stmt->fetchAll();
                         <?php endforeach; ?>
                     <?php else: ?>
                         <tr>
-                            <td colspan="6" class="text-center py-4 text-muted">Tidak ada data pelanggan ditemukan.</td>
+                            <td colspan="5" class="text-center py-4 text-muted">Tidak ada data pelanggan ditemukan.</td>
                         </tr>
                     <?php endif; ?>
                 </tbody>

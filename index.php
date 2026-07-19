@@ -215,7 +215,7 @@ foreach ($reservasi_hari_ini as $res) {
                         </div>
                         <h4 class="fw-bold mb-2"><?= htmlspecialchars($lap['nama_lapangan']) ?></h4>
                         <div class="d-flex align-items-center mb-3 text-muted">
-                            <i class="bi bi-people-fill me-2"></i> Kapasitas Maksimal: <?= $lap['kapasitas'] ?? 10 ?> Orang
+                            <i class="bi bi-tag-fill me-2"></i> Jenis Lapangan: <?= htmlspecialchars($lap['jenis']) ?>
                         </div>
                         <div class="mt-auto">
                             <div class="fs-4 fw-bold text-success mb-1">

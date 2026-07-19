@@ -11,19 +11,19 @@ require_once '../includes/header.php';
                 <tr>
                     <th>No</th>
                     <th>Nama Lapangan</th>
-                    <th>Kapasitas</th>
+                    <th>Jenis</th>
                     <th>Harga per Jam</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
-                $query = mysqli_query($conn, "SELECT * FROM lapangan");
+                $stmt = $koneksi->query("SELECT * FROM lapangan");
                 $no = 1;
-                while ($row = mysqli_fetch_assoc($query)) { ?>
+                while ($row = $stmt->fetch()) { ?>
                     <tr>
                         <td><?= $no++ ?></td>
                         <td class="fw-semibold"><?= htmlspecialchars($row['nama_lapangan']) ?></td>
-                        <td><?= htmlspecialchars($row['kapasitas'] ?? 10) ?> Orang</td>
+                        <td><?= htmlspecialchars($row['jenis']) ?></td>
                         <td>Rp <?= number_format($row['harga_per_jam'], 0, ',', '.') ?></td>
                     </tr>
                 <?php } ?>

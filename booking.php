@@ -14,8 +14,6 @@ $success = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nama        = trim($_POST['nama'] ?? '');
     $no_hp       = trim($_POST['no_hp'] ?? '');
-    $jumlah      = (int)($_POST['jumlah_orang'] ?? 1);
-    
     $id_lapangan = $_POST['id_lapangan'] ?? '';
     $tanggal     = $_POST['tanggal'] ?? '';
     $jam_mulai   = $_POST['jam_mulai'] ?? '';
@@ -24,6 +22,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($nama) || empty($no_hp) || empty($id_lapangan) || empty($tanggal) || empty($jam_mulai) || empty($jam_selesai)) {
         $error = "Semua kolom wajib diisi!";
     } else {
+        // Validasi waktu terlewat (Past date/time validation)
+        $currentDateTime = new DateTime(); // Waktu sekarang
+        $bookingDateTime = new DateTime("$tanggal $jam_mulai"); // Waktu yang dipilih pelanggan
+        
+        if ($bookingDateTime < $currentDateTime) {
+            $error = "Tidak dapat melakukan booking untuk waktu yang sudah berlalu.";
+        } else {
         try {
             $koneksi->beginTransaction();
             
@@ -52,8 +57,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $id_pelanggan = $pelanggan['id_pelanggan'];
             } else {
                 // Buat pelanggan baru dengan data dummy untuk field yang wajib tapi tidak ditanyakan
-                $stmt_insert = $koneksi->prepare("INSERT INTO pelanggan (nama, alamat, no_hp, email) VALUES (?, '-', ?, '-')");
-                $stmt_insert->execute([$nama, $no_hp]);
+                $username_dummy = "user_" . time();
+                $password_dummy = password_hash("pembeli123", PASSWORD_DEFAULT);
+                
+                $stmt_insert = $koneksi->prepare("INSERT INTO pelanggan (nama, no_hp, email, username, password) VALUES (?, ?, '-', ?, ?)");
+                $stmt_insert->execute([$nama, $no_hp, $username_dummy, $password_dummy]);
                 $id_pelanggan = $koneksi->lastInsertId();
             }
 
@@ -79,10 +87,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // 5. Simpan Reservasi
             $stmt_res = $koneksi->prepare("
-                INSERT INTO reservasi (id_pelanggan, id_lapangan, tanggal, jam_mulai, jam_selesai, total_bayar, status, jumlah_orang)
-                VALUES (?, ?, ?, ?, ?, ?, 'Menunggu Pembayaran', ?)
+                INSERT INTO reservasi (id_pelanggan, id_lapangan, tanggal, jam_mulai, jam_selesai, total_bayar, status)
+                VALUES (?, ?, ?, ?, ?, ?, 'Menunggu Pembayaran')
             ");
-            $stmt_res->execute([$id_pelanggan, $id_lapangan, $tanggal, $jam_mulai, $jam_selesai, $total_bayar, $jumlah]);
+            $stmt_res->execute([$id_pelanggan, $id_lapangan, $tanggal, $jam_mulai, $jam_selesai, $total_bayar]);
             
             $id_reservasi = $koneksi->lastInsertId();
 
@@ -95,6 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $koneksi->rollBack();
             $error = $e->getMessage();
         }
+        } // close validation else
     }
 }
 ?>
@@ -241,12 +250,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <input type="text" name="no_hp" class="form-control border-start-0" placeholder="08123456xxx" required>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-medium text-secondary">Jumlah Orang</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-light border-0"><i class="bi bi-people text-muted"></i></span>
-                                    <input type="number" name="jumlah_orang" class="form-control border-start-0" value="1" min="1" required>
-                                </div>
+                            <div class="col-md-12">
+                                <p class="form-text text-muted mb-0"><i class="bi bi-info-circle me-1"></i> Pastikan No. WhatsApp aktif untuk konfirmasi pembayaran.</p>
                             </div>
                         </div>
 

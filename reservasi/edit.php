@@ -146,6 +146,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             </div>
 
+            <?php if (!empty($data['bukti_pembayaran'])): ?>
+            <div class="row mb-4 mt-3">
+                <div class="col-md-12">
+                    <label class="form-label fw-bold text-dark"><i class="bi bi-image me-2"></i>Bukti Pembayaran Pelanggan</label>
+                    <div class="border-0 rounded-4 p-4 text-center shadow-sm" style="background-color: #f8fafc; border: 1px solid #e2e8f0 !important;">
+                        <a href="../uploads/bukti_pembayaran/<?= htmlspecialchars($data['bukti_pembayaran']) ?>" target="_blank" class="d-inline-block position-relative">
+                            <img src="../uploads/bukti_pembayaran/<?= htmlspecialchars($data['bukti_pembayaran']) ?>" alt="Bukti Pembayaran" class="rounded-3 shadow-sm" style="max-height: 280px; object-fit: contain; transition: transform 0.3s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+                        </a>
+                        <div class="mt-3 text-secondary small"><i class="bi bi-zoom-in me-1"></i> Klik gambar untuk melihat ukuran penuh</div>
+                    </div>
+                </div>
+            </div>
+            <?php endif; ?>
+
             <hr class="my-4">
             
             <div class="d-flex justify-content-end gap-2">

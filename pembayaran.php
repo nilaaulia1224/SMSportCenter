@@ -18,6 +18,34 @@ if (!$data) {
     echo "Data reservasi tidak ditemukan.";
     exit;
 }
+
+// Proses Upload Bukti Pembayaran
+$upload_msg = '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['bukti'])) {
+    $file = $_FILES['bukti'];
+    if ($file['error'] === UPLOAD_ERR_OK) {
+        $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+        $allowed = ['jpg', 'jpeg', 'png'];
+        if (in_array(strtolower($ext), $allowed)) {
+            $filename = "bukti_" . $id_reservasi . "_" . time() . "." . $ext;
+            $destination = "uploads/bukti_pembayaran/" . $filename;
+            
+            if (move_uploaded_file($file['tmp_name'], $destination)) {
+                $stmt_up = $koneksi->prepare("UPDATE reservasi SET bukti_pembayaran = ? WHERE id_reservasi = ?");
+                $stmt_up->execute([$filename, $id_reservasi]);
+                // Refresh data
+                $data['bukti_pembayaran'] = $filename;
+                $upload_msg = "<div class='alert alert-success'>Bukti pembayaran berhasil diunggah!</div>";
+            } else {
+                $upload_msg = "<div class='alert alert-danger'>Gagal menyimpan file.</div>";
+            }
+        } else {
+            $upload_msg = "<div class='alert alert-danger'>Format file harus JPG atau PNG.</div>";
+        }
+    } else {
+        $upload_msg = "<div class='alert alert-danger'>Terjadi kesalahan saat upload.</div>";
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -132,15 +160,37 @@ if (!$data) {
                 </div>
             </div>
 
-            <?php
-            // Text WA Konfirmasi
-            $pesan = "Halo Admin SM Sport Center, saya sudah melakukan pembayaran QRIS untuk booking: \n\nKode: #{$data['id_reservasi']}\nNama: {$data['nama']}\nLapangan: {$data['nama_lapangan']}\nTanggal: {$data['tanggal']}\nTotal: Rp " . number_format($data['total_bayar'],0,',','.') . "\n\nTerlampir bukti transfer saya.";
-            $wa_url = "https://wa.me/6281234567890?text=" . urlencode($pesan);
-            ?>
-
-            <a href="<?= $wa_url ?>" target="_blank" class="btn btn-wa text-decoration-none d-block">
-                <i class="bi bi-whatsapp me-2"></i> Konfirmasi Pembayaran
-            </a>
+            <?= $upload_msg ?>
+            
+            <?php if (empty($data['bukti_pembayaran'])): ?>
+                <!-- Form Upload -->
+                <form action="pembayaran.php?id=<?= $id_reservasi ?>" method="POST" enctype="multipart/form-data" class="mb-4 text-start">
+                    <div class="p-4 rounded-4" style="background-color: #f8fafc; border: 1px dashed #cbd5e1;">
+                        <label class="form-label fw-bold text-dark mb-3"><i class="bi bi-cloud-arrow-up me-2"></i>Upload Bukti Pembayaran</label>
+                        <input type="file" name="bukti" class="form-control form-control-lg mb-3 shadow-sm" accept=".jpg,.jpeg,.png" style="border-radius: 12px; border: 1px solid #e2e8f0; font-size: 0.9rem;" required>
+                        <button type="submit" class="btn w-100 fw-bold" style="background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: white; border-radius: 12px; padding: 0.8rem; border: none; box-shadow: 0 4px 15px rgba(79, 70, 229, 0.2);">
+                            Kirim Bukti Pembayaran
+                        </button>
+                    </div>
+                </form>
+            <?php else: ?>
+                <!-- Bukti Sudah Diupload -->
+                <div class="alert alert-success d-flex align-items-center p-4 rounded-4 mb-4 border-0" style="background-color: #dcfce7; color: #166534;">
+                    <i class="bi bi-check-circle-fill fs-3 me-3"></i> 
+                    <div>
+                        <h6 class="fw-bold mb-1">Berhasil Diunggah!</h6>
+                        <span class="small">Bukti pembayaran Anda telah tersimpan di sistem kami.</span>
+                    </div>
+                </div>
+                <?php
+                // Text WA Konfirmasi
+                $pesan = "Halo Admin SM Sport Center, saya sudah melakukan pembayaran QRIS untuk booking: \n\nKode: #{$data['id_reservasi']}\nNama: {$data['nama']}\nLapangan: {$data['nama_lapangan']}\nTanggal: {$data['tanggal']}\nTotal: Rp " . number_format($data['total_bayar'],0,',','.') . "\n\nTerlampir bukti transfer saya (Sudah diupload di sistem).";
+                $wa_url = "https://wa.me/6281234567890?text=" . urlencode($pesan);
+                ?>
+                <a href="<?= $wa_url ?>" target="_blank" class="btn btn-wa text-decoration-none d-block">
+                    <i class="bi bi-whatsapp me-2"></i> Konfirmasi via WhatsApp
+                </a>
+            <?php endif; ?>
             
             <div class="mt-3">
                 <a href="booking.php" class="text-muted text-decoration-none small">Kembali ke Halaman Booking</a>

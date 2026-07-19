@@ -7,7 +7,7 @@ require_once '../includes/header.php';
 $search = $_GET['search'] ?? '';
 
 // Query data reservasi
-$sql = "SELECT r.*, p.nama AS nama_pelanggan, l.nama_lapangan, l.jenis 
+$sql = "SELECT r.*, p.nama AS nama_pelanggan, p.no_hp, l.nama_lapangan, l.jenis 
         FROM reservasi r
         JOIN pelanggan p ON r.id_pelanggan = p.id_pelanggan
         JOIN lapangan l ON r.id_lapangan = l.id_lapangan";
@@ -105,6 +105,20 @@ function getStatusBadge($status) {
                                     <a href="hapus.php?id=<?= $row['id_reservasi'] ?>" class="btn btn-sm btn-outline-danger mb-1" title="Hapus" onclick="return confirm('Yakin ingin menghapus data reservasi ini?');">
                                         <i class="bi bi-trash"></i>
                                     </a>
+                                    <?php if ($row['status'] === 'Selesai' && !empty($row['no_hp'])): ?>
+                                        <?php 
+                                            // Format no_hp (ubah 08 menjadi 628)
+                                            $no_wa = $row['no_hp'];
+                                            if(strpos($no_wa, '0') === 0) $no_wa = '62' . substr($no_wa, 1);
+                                            // Asumsi base_url untuk link struk (sesuaikan dengan domain/ip yang dipakai, ini menggunakan localhost)
+                                            $struk_url = "http://localhost/SMSportCenter/struk.php?id=" . $row['id_reservasi'];
+                                            $pesan_wa = "Terima kasih, reservasi Anda telah kami konfirmasi dan berstatus Selesai. Anda dapat melihat E-Receipt / struk lunas Anda di link berikut: " . $struk_url;
+                                            $wa_link = "https://wa.me/" . $no_wa . "?text=" . urlencode($pesan_wa);
+                                        ?>
+                                        <a href="<?= $wa_link ?>" target="_blank" class="btn btn-sm btn-outline-success mb-1" title="Kirim Struk via WA">
+                                            <i class="bi bi-whatsapp"></i>
+                                        </a>
+                                    <?php endif; ?>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
