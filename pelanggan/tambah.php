@@ -1,0 +1,89 @@
+<?php
+$page_title = "Tambah Pelanggan";
+require_once '../config/koneksi.php';
+require_once '../includes/header.php';
+
+$error = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $nama = trim($_POST['nama'] ?? '');
+    $no_hp = trim($_POST['no_hp'] ?? '');
+    $email = trim($_POST['email'] ?? '');
+    $alamat = trim($_POST['alamat'] ?? '');
+
+    if (empty($nama) || empty($no_hp)) {
+        $error = "Nama dan No. WhatsApp wajib diisi!";
+    } else {
+        // Cek duplikasi no hp
+        $cek = $koneksi->prepare("SELECT COUNT(*) FROM pelanggan WHERE no_hp = ?");
+        $cek->execute([$no_hp]);
+        
+        if ($cek->fetchColumn() > 0) {
+            $error = "Nomor WhatsApp tersebut sudah terdaftar!";
+        } else {
+            $stmt = $koneksi->prepare("INSERT INTO pelanggan (nama, no_hp, email, alamat) VALUES (?, ?, ?, ?)");
+            $stmt->execute([$nama, $no_hp, $email, $alamat]);
+            
+            $_SESSION['success'] = "Data pelanggan baru berhasil ditambahkan!";
+            echo "<script>window.location.href = 'index.php';</script>";
+            exit();
+        }
+    }
+}
+?>
+
+<div class="page-header d-flex justify-content-between align-items-center">
+    <div>
+        <h4><i class="bi bi-person-plus-fill me-2 text-primary"></i>Tambah Pelanggan</h4>
+        <p class="text-muted mb-0">Input data pendaftar baru secara manual</p>
+    </div>
+    <a href="index.php" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-1"></i> Kembali
+    </a>
+</div>
+
+<?php if ($error): ?>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-circle-fill me-2"></i> <?= htmlspecialchars($error) ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+<?php endif; ?>
+
+<div class="card shadow-sm border-0 mb-4" style="max-width: 800px;">
+    <div class="card-body p-4">
+        <form action="" method="POST">
+            
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Nama Lengkap <span class="text-danger">*</span></label>
+                <input type="text" name="nama" class="form-control" placeholder="Masukkan nama lengkap" value="<?= htmlspecialchars($_POST['nama'] ?? '') ?>" required>
+            </div>
+            
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">No. WhatsApp <span class="text-danger">*</span></label>
+                    <input type="text" name="no_hp" class="form-control" placeholder="08xxxxxxxxx" value="<?= htmlspecialchars($_POST['no_hp'] ?? '') ?>" required>
+                </div>
+                <div class="col-md-6 mt-3 mt-md-0">
+                    <label class="form-label fw-semibold">Email</label>
+                    <input type="email" name="email" class="form-control" placeholder="email@contoh.com" value="<?= htmlspecialchars($_POST['email'] ?? '') ?>">
+                    <small class="text-muted">Boleh dikosongkan</small>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label fw-semibold">Alamat Lengkap</label>
+                <textarea name="alamat" class="form-control" rows="3" placeholder="Masukkan alamat domisili..."><?= htmlspecialchars($_POST['alamat'] ?? '') ?></textarea>
+                <small class="text-muted">Boleh dikosongkan</small>
+            </div>
+            
+            <hr class="my-4">
+            <div class="d-flex justify-content-end gap-2">
+                <button type="reset" class="btn btn-light border">Reset</button>
+                <button type="submit" class="btn btn-primary"><i class="bi bi-save me-1"></i> Simpan Pelanggan</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<?php require_once '../includes/footer.php'; ?>
