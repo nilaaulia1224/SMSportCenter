@@ -9,7 +9,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nama = trim($_POST['nama'] ?? '');
     $no_hp = trim($_POST['no_hp'] ?? '');
     $email = trim($_POST['email'] ?? '');
-    $alamat = trim($_POST['alamat'] ?? '');
 
     if (empty($nama) || empty($no_hp)) {
         $error = "Nama dan No. WhatsApp wajib diisi!";
@@ -21,8 +20,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($cek->fetchColumn() > 0) {
             $error = "Nomor WhatsApp tersebut sudah terdaftar!";
         } else {
-            $stmt = $koneksi->prepare("INSERT INTO pelanggan (nama, no_hp, email, alamat) VALUES (?, ?, ?, ?)");
-            $stmt->execute([$nama, $no_hp, $email, $alamat]);
+            $stmt = $koneksi->prepare("INSERT INTO pelanggan (nama, no_hp, email) VALUES (?, ?, ?)");
+            $stmt->execute([$nama, $no_hp, $email]);
             
             $_SESSION['success'] = "Data pelanggan baru berhasil ditambahkan!";
             echo "<script>window.location.href = 'index.php';</script>";
@@ -70,11 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             </div>
 
-            <div class="mb-4">
-                <label class="form-label fw-semibold">Alamat Lengkap</label>
-                <textarea name="alamat" class="form-control" rows="3" placeholder="Masukkan alamat domisili..."><?= htmlspecialchars($_POST['alamat'] ?? '') ?></textarea>
-                <small class="text-muted">Boleh dikosongkan</small>
-            </div>
+            
             
             <hr class="my-4">
             <div class="d-flex justify-content-end gap-2">

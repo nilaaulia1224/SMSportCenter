@@ -20,6 +20,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($id_pelanggan) || empty($id_lapangan) || empty($tanggal) || empty($jam_mulai) || empty($jam_selesai) || empty($total_bayar)) {
         $error = "Semua kolom wajib diisi!";
+    } else if ($jam_mulai < '08:00' || $jam_mulai > '22:00') {
+        $error = "Jam mulai booking hanya tersedia antara jam 08:00 hingga 22:00 (Jam operasional 08:00 - 23:00).";
+    } else if ($jam_selesai > '23:00' || $jam_selesai <= $jam_mulai) {
+        $error = "Jam selesai penyewaan tidak boleh melebihi jam operasional tutup (23:00).";
     } else {
         // Validasi Double Booking: Mengecek jadwal yang beririsan
         $is_bentrok = false;
@@ -110,11 +114,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
                 <div class="col-md-4 mt-3 mt-md-0">
                     <label class="form-label fw-semibold">Jam Mulai</label>
-                    <input type="time" name="jam_mulai" id="jam_mulai" class="form-control" value="<?= htmlspecialchars($_POST['jam_mulai'] ?? '08:00') ?>" required onchange="hitungTotal()">
+                    <select name="jam_mulai" id="jam_mulai" class="form-select" required onchange="hitungTotal()">
+                        <?php 
+                        $val_mulai = $_POST['jam_mulai'] ?? '08:00';
+                        for ($h = 8; $h <= 22; $h++) {
+                            foreach (['00', '30'] as $m) {
+                                $t = sprintf('%02d:%s', $h, $m);
+                                $sel = (substr($val_mulai,0,5) == $t) ? 'selected' : '';
+                                echo "<option value=\"$t\" $sel>$t WIB</option>";
+                            }
+                        }
+                        ?>
+                    </select>
                 </div>
                 <div class="col-md-4 mt-3 mt-md-0">
                     <label class="form-label fw-semibold">Jam Selesai</label>
-                    <input type="time" name="jam_selesai" id="jam_selesai" class="form-control" value="<?= htmlspecialchars($_POST['jam_selesai'] ?? '09:00') ?>" required onchange="hitungTotal()">
+                    <select name="jam_selesai" id="jam_selesai" class="form-select" required onchange="hitungTotal()">
+                        <?php 
+                        $val_selesai = $_POST['jam_selesai'] ?? '09:00';
+                        for ($h = 8; $h <= 23; $h++) {
+                            foreach (['00', '30'] as $m) {
+                                if ($h == 23 && $m == '30') continue; // jam tutup 23:00
+                                if ($h == 8 && $m == '00') continue;
+                                $t = sprintf('%02d:%s', $h, $m);
+                                $sel = (substr($val_selesai,0,5) == $t) ? 'selected' : '';
+                                echo "<option value=\"$t\" $sel>$t WIB</option>";
+                            }
+                        }
+                        ?>
+                    </select>
                 </div>
             </div>
 

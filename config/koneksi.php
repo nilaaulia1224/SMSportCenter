@@ -4,6 +4,9 @@
  * Menggunakan PDO (PHP Data Objects) untuk keamanan (Prepared Statement)
  */
 
+// Set Timezone ke Asia/Jakarta (WIB)
+date_default_timezone_set('Asia/Jakarta');
+
 $host     = 'localhost';
 $db_name  = 'db_smsportcenter';
 $username = 'root';

@@ -53,107 +53,114 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['bukti'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pembayaran QRIS - SM Sport Center</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Figma UI System CSS -->
+    <link href="assets/css/style.css" rel="stylesheet">
     <style>
         body {
-            font-family: 'Outfit', sans-serif;
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem 0;
+            background-color: var(--surface-soft);
         }
         .payment-card {
-            background: #fff;
-            border-radius: 24px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            overflow: hidden;
+            background-color: var(--canvas);
+            border-radius: var(--rounded-lg);
+            border: 1px solid var(--hairline);
+            padding: 24px;
+            margin: 24px auto;
             max-width: 500px;
-            width: 100%;
             text-align: center;
         }
         .header-qris {
-            background: #ea0a2a; /* Warna khas merah QRIS */
-            color: white;
-            padding: 1.5rem;
+            background-color: var(--block-cream);
+            color: var(--ink);
+            padding: 24px;
+            border-radius: var(--rounded-md);
+            margin-bottom: 24px;
+            border: 1px solid var(--hairline);
         }
         .qr-placeholder {
-            width: 250px;
-            height: 250px;
-            background: #fff;
-            border: 2px dashed #cbd5e1;
-            border-radius: 16px;
-            margin: 2rem auto;
+            width: 200px;
+            height: 200px;
+            background: var(--canvas);
+            border: 1px solid var(--hairline);
+            border-radius: var(--rounded-md);
+            margin: 20px auto;
             display: flex;
             align-items: center;
             justify-content: center;
-            position: relative;
+            padding: 12px;
         }
         .qr-placeholder img {
-            max-width: 90%;
-            border-radius: 8px;
+            max-width: 100%;
+            border-radius: var(--rounded-xs);
         }
         .price-box {
-            font-size: 2.5rem;
+            font-size: 2.25rem;
             font-weight: 800;
-            color: #0f172a;
-            margin-bottom: 1rem;
+            color: var(--primary);
+            margin-bottom: 8px;
+            line-height: 1;
+            letter-spacing: -0.02em;
         }
         .btn-wa {
-            background: #25D366;
+            background-color: #25D366;
             color: white;
             border: none;
-            border-radius: 12px;
-            padding: 1rem;
+            border-radius: var(--rounded-pill);
+            padding: 12px 28px;
             font-weight: 600;
-            width: 100%;
-            transition: all 0.3s;
+            font-size: 1.125rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition);
+            text-decoration: none;
         }
         .btn-wa:hover {
-            background: #128C7E;
-            transform: translateY(-2px);
+            background-color: #128C7E;
+            color: white;
+            transform: translateY(-1px);
         }
     </style>
 </head>
 <body>
 
 <div class="container d-flex justify-content-center">
-    <div class="payment-card">
+    <div class="payment-card shadow-sm">
         <div class="header-qris">
-            <h3 class="fw-bold mb-0">Pembayaran QRIS</h3>
-            <p class="mb-0 text-white-50">Scan kode di bawah untuk membayar</p>
+            <h3 class="display-lg mb-2" style="font-size: 2rem;">Pembayaran QRIS</h3>
+            <p class="mb-0 fs-6 text-muted">Scan kode di bawah untuk membayar</p>
         </div>
         
-        <div class="p-4 p-md-5">
-            <h5 class="fw-bold text-secondary mb-1">Total Tagihan</h5>
+        <div>
+            <p class="eyebrow text-muted mb-2">Total Tagihan</p>
             <div class="price-box">
                 Rp <?= number_format($data['total_bayar'], 0, ',', '.') ?>
             </div>
 
-            <div class="qr-placeholder">
+            <div class="qr-placeholder shadow-sm">
                 <!-- Dummy QR Code (menggunakan API publik untuk dummy QR) -->
                 <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=DUMMY_QRIS_<?= $data['id_reservasi'] ?>" alt="QRIS">
             </div>
 
-            <div class="bg-light rounded-3 p-3 text-start mb-4">
+            <div class="bg-light rounded-3 p-4 text-start mb-4 border" style="border-color: var(--hairline) !important; background-color: var(--surface-soft) !important;">
                 <div class="d-flex justify-content-between mb-2">
-                    <span class="text-muted">Kode Booking:</span>
-                    <span class="fw-bold">#<?= $data['id_reservasi'] ?></span>
+                    <span class="text-muted fs-6">Kode Booking:</span>
+                    <span class="fw-bold text-dark">#<?= $data['id_reservasi'] ?></span>
                 </div>
                 <div class="d-flex justify-content-between mb-2">
-                    <span class="text-muted">Nama:</span>
-                    <span class="fw-semibold"><?= htmlspecialchars($data['nama']) ?></span>
+                    <span class="text-muted fs-6">Nama:</span>
+                    <span class="fw-bold text-dark"><?= htmlspecialchars($data['nama']) ?></span>
                 </div>
                 <div class="d-flex justify-content-between mb-2">
-                    <span class="text-muted">Lapangan:</span>
-                    <span class="fw-semibold"><?= htmlspecialchars($data['nama_lapangan']) ?></span>
+                    <span class="text-muted fs-6">Lapangan:</span>
+                    <span class="fw-bold text-dark"><?= htmlspecialchars($data['nama_lapangan']) ?></span>
                 </div>
                 <div class="d-flex justify-content-between">
-                    <span class="text-muted">Jadwal:</span>
-                    <span class="fw-semibold text-end">
+                    <span class="text-muted fs-6">Jadwal:</span>
+                    <span class="fw-bold text-dark text-end">
                         <?= date('d M Y', strtotime($data['tanggal'])) ?><br>
                         <?= substr($data['jam_mulai'],0,5) ?> - <?= substr($data['jam_selesai'],0,5) ?>
                     </span>
@@ -165,35 +172,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['bukti'])) {
             <?php if (empty($data['bukti_pembayaran'])): ?>
                 <!-- Form Upload -->
                 <form action="pembayaran.php?id=<?= $id_reservasi ?>" method="POST" enctype="multipart/form-data" class="mb-4 text-start">
-                    <div class="p-4 rounded-4" style="background-color: #f8fafc; border: 1px dashed #cbd5e1;">
+                    <div class="p-4 rounded-3 border" style="background-color: var(--canvas); border-color: var(--hairline) !important;">
                         <label class="form-label fw-bold text-dark mb-3"><i class="bi bi-cloud-arrow-up me-2"></i>Upload Bukti Pembayaran</label>
-                        <input type="file" name="bukti" class="form-control form-control-lg mb-3 shadow-sm" accept=".jpg,.jpeg,.png" style="border-radius: 12px; border: 1px solid #e2e8f0; font-size: 0.9rem;" required>
-                        <button type="submit" class="btn w-100 fw-bold" style="background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: white; border-radius: 12px; padding: 0.8rem; border: none; box-shadow: 0 4px 15px rgba(79, 70, 229, 0.2);">
+                        <input type="file" name="bukti" class="figma-input mb-4" accept=".jpg,.jpeg,.png" required>
+                        <button type="submit" class="btn-pill w-100 fs-5">
                             Kirim Bukti Pembayaran
                         </button>
                     </div>
                 </form>
             <?php else: ?>
                 <!-- Bukti Sudah Diupload -->
-                <div class="alert alert-success d-flex align-items-center p-4 rounded-4 mb-4 border-0" style="background-color: #dcfce7; color: #166534;">
-                    <i class="bi bi-check-circle-fill fs-3 me-3"></i> 
-                    <div>
+                <div class="alert alert-success d-flex align-items-center p-4 rounded-3 mb-4 border" style="background-color: var(--block-lime); color: var(--ink); border-color: var(--hairline) !important;">
+                    <i class="bi bi-check-circle-fill fs-3 me-3 text-success"></i> 
+                    <div class="text-start">
                         <h6 class="fw-bold mb-1">Berhasil Diunggah!</h6>
-                        <span class="small">Bukti pembayaran Anda telah tersimpan di sistem kami.</span>
+                        <span class="small opacity-75">Bukti pembayaran Anda telah tersimpan.</span>
                     </div>
                 </div>
                 <?php
                 // Text WA Konfirmasi
                 $pesan = "Halo Admin SM Sport Center, saya sudah melakukan pembayaran QRIS untuk booking: \n\nKode: #{$data['id_reservasi']}\nNama: {$data['nama']}\nLapangan: {$data['nama_lapangan']}\nTanggal: {$data['tanggal']}\nTotal: Rp " . number_format($data['total_bayar'],0,',','.') . "\n\nTerlampir bukti transfer saya (Sudah diupload di sistem).";
-                $wa_url = "https://wa.me/6281234567890?text=" . urlencode($pesan);
+                $wa_url = "https://wa.me/6283160763177?text=" . urlencode($pesan);
                 ?>
-                <a href="<?= $wa_url ?>" target="_blank" class="btn btn-wa text-decoration-none d-block">
+                <a href="<?= $wa_url ?>" target="_blank" class="btn-wa mt-3 w-100">
                     <i class="bi bi-whatsapp me-2"></i> Konfirmasi via WhatsApp
                 </a>
             <?php endif; ?>
             
-            <div class="mt-3">
-                <a href="booking.php" class="text-muted text-decoration-none small">Kembali ke Halaman Booking</a>
+            <div class="mt-4">
+                <a href="index.php" class="text-muted text-decoration-none border-bottom pb-1">Kembali ke Beranda</a>
             </div>
         </div>
     </div>

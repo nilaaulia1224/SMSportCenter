@@ -20,7 +20,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nama = trim($_POST['nama'] ?? '');
     $no_hp = trim($_POST['no_hp'] ?? '');
     $email = trim($_POST['email'] ?? '');
-    $alamat = trim($_POST['alamat'] ?? '');
 
     if (empty($nama) || empty($no_hp)) {
         $error = "Nama dan No. WhatsApp wajib diisi!";
@@ -32,8 +31,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($cek->fetchColumn() > 0) {
             $error = "Nomor WhatsApp tersebut sudah digunakan oleh pelanggan lain!";
         } else {
-            $stmt = $koneksi->prepare("UPDATE pelanggan SET nama=?, no_hp=?, email=?, alamat=? WHERE id_pelanggan=?");
-            $stmt->execute([$nama, $no_hp, $email, $alamat, $id]);
+            $stmt = $koneksi->prepare("UPDATE pelanggan SET nama=?, no_hp=?, email=? WHERE id_pelanggan=?");
+            $stmt->execute([$nama, $no_hp, $email, $id]);
             
             $_SESSION['success'] = "Data pelanggan berhasil diperbarui!";
             echo "<script>window.location.href = 'index.php';</script>";
@@ -80,10 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             </div>
 
-            <div class="mb-4">
-                <label class="form-label fw-semibold">Alamat Lengkap</label>
-                <textarea name="alamat" class="form-control" rows="3"><?= htmlspecialchars($_POST['alamat'] ?? $data['alamat']) ?></textarea>
-            </div>
+            
             
             <hr class="my-4">
             <div class="d-flex justify-content-end gap-2">

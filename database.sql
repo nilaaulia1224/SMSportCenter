@@ -20,11 +20,8 @@ CREATE TABLE IF NOT EXISTS `users` (
 CREATE TABLE IF NOT EXISTS `pelanggan` (
   `id_pelanggan` INT AUTO_INCREMENT PRIMARY KEY,
   `nama` VARCHAR(100) NOT NULL,
-  `alamat` TEXT NOT NULL,
   `no_hp` VARCHAR(20) NOT NULL,
-  `email` VARCHAR(100) NOT NULL,
-  `username` VARCHAR(50) NOT NULL UNIQUE,
-  `password` VARCHAR(255) NOT NULL
+  `email` VARCHAR(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -64,19 +61,20 @@ INSERT INTO `users` (`id`, `username`, `password`, `role`) VALUES
 (2, 'staff', '$2y$10$A4VwD/G2f.f4.ujLzhcJNex59suWyGPKigP4GzXX7d/ff9i1IeURu', 'staff');
 
 -- Data Dummy pelanggan (password default: pembeli123)
-INSERT INTO `pelanggan` (`id_pelanggan`, `nama`, `alamat`, `no_hp`, `email`, `username`, `password`) VALUES
-(1, 'Budi Santoso', 'Jl. Sudirman No. 12, Jakarta', '081234567890', 'budi@gmail.com', 'budi', '$2y$10$A4VwD/G2f.f4.ujLzhcJNex59suWyGPKigP4GzXX7d/ff9i1IeURu'),
-(2, 'Siti Aminah', 'Jl. Merdeka No. 5, Bandung', '082345678901', 'siti@gmail.com', 'siti', '$2y$10$A4VwD/G2f.f4.ujLzhcJNex59suWyGPKigP4GzXX7d/ff9i1IeURu'),
-(3, 'Joko Widodo', 'Jl. Diponegoro No. 45, Solo', '083456789012', 'joko@gmail.com', 'joko', '$2y$10$A4VwD/G2f.f4.ujLzhcJNex59suWyGPKigP4GzXX7d/ff9i1IeURu'),
-(4, 'Dewi Lestari', 'Jl. Gajah Mada No. 8, Yogyakarta', '084567890123', 'dewi@gmail.com', 'dewi', '$2y$10$A4VwD/G2f.f4.ujLzhcJNex59suWyGPKigP4GzXX7d/ff9i1IeURu'),
-(5, 'Rian Hidayat', 'Jl. Pemuda No. 10, Surabaya', '085678901234', 'rian@gmail.com', 'rian', '$2y$10$A4VwD/G2f.f4.ujLzhcJNex59suWyGPKigP4GzXX7d/ff9i1IeURu');
+INSERT INTO `pelanggan` (`id_pelanggan`, `nama`, `no_hp`, `email`) VALUES
+(1, 'Budi Santoso', '081234567890', 'budi@gmail.com'),
+(2, 'Siti Aminah', '082345678901', 'siti@gmail.com'),
+(3, 'Joko Widodo', '083456789012', 'joko@gmail.com'),
+(4, 'Dewi Lestari', '084567890123', 'dewi@gmail.com'),
+(5, 'Rian Hidayat', '085678901234', 'rian@gmail.com');
 
 -- Data Dummy lapangan
 INSERT INTO `lapangan` (`id_lapangan`, `nama_lapangan`, `jenis`, `harga_per_jam`, `status`) VALUES
 (1, 'Lapangan Futsal A (Sintetis)', 'Futsal', 150000, 'Tersedia'),
 (2, 'Lapangan Futsal B (Vinyl)', 'Futsal', 130000, 'Tersedia'),
 (3, 'Lapangan Badminton 1', 'Badminton', 50000, 'Tersedia'),
-(4, 'Lapangan Badminton 2', 'Badminton', 50000, 'Tidak Tersedia');
+(4, 'Lapangan Badminton 2', 'Badminton', 50000, 'Tersedia'),
+(5, 'Lapangan Badminton 3', 'Badminton', 50000, 'Tersedia');
 
 -- Data Dummy reservasi
 -- Menggunakan tanggal hari ini dan besok untuk demo reservasi yang dinamis

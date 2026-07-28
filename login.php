@@ -68,12 +68,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <!-- Logo -->
         <div class="text-center mb-4">
-            <div class="login-logo">
-                <i class="bi bi-trophy-fill text-white"></i>
-            </div>
-            <h3 class="fw-bold mt-3">SM Sport Center</h3>
-            <p class="text-muted mb-0">Sistem Reservasi Lapangan Olahraga</p>
-            <p class="text-muted" style="font-size:0.8rem;">Masuk untuk mengakses dashboard</p>
+            <img src="assets/img/logo.png" alt="SM Sport Center" style="width: 80px; height: 80px; object-fit: cover;" class="rounded-circle border border-2 border-primary shadow-sm mb-3">
+            <h3 class="fw-bold text-dark">SM Sport Center</h3>
+            <p class="text-muted fs-6 mb-0">Sistem Reservasi Lapangan Olahraga</p>
         </div>
 
         <!-- Alert error -->
@@ -87,13 +84,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <!-- Form Login -->
         <form action="login.php" method="POST" novalidate id="formLogin">
 
-            <div class="mb-3">
-                <label for="username" class="form-label">
+            <div class="mb-4">
+                <label for="username" class="form-label text-dark fw-medium">
                     <i class="bi bi-person me-1"></i> Username
                 </label>
                 <input
                     type="text"
-                    class="form-control"
+                    class="figma-input"
                     id="username"
                     name="username"
                     placeholder="Masukkan username"
@@ -104,44 +101,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
 
             <div class="mb-4">
-                <label for="password" class="form-label">
+                <label for="password" class="form-label text-dark fw-medium">
                     <i class="bi bi-lock me-1"></i> Password
                 </label>
                 <div class="input-group">
                     <input
                         type="password"
-                        class="form-control border-end-0"
+                        class="figma-input border-end-0"
                         id="password"
                         name="password"
                         placeholder="Masukkan password"
                         required
                         autocomplete="current-password"
+                        style="border-top-right-radius: 0; border-bottom-right-radius: 0;"
                     >
-                    <button type="button" class="btn btn-light border border-start-0"
-                            id="togglePassword" title="Tampilkan/Sembunyikan Password">
+                    <button type="button" class="btn btn-light border"
+                            id="togglePassword" title="Tampilkan/Sembunyikan Password" style="border-top-right-radius: 8px; border-bottom-right-radius: 8px; border-color: var(--hairline) !important; background: var(--canvas);">
                         <i class="bi bi-eye" id="eyeIcon"></i>
                     </button>
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold" id="btnLogin">
-                <i class="bi bi-box-arrow-in-right me-2"></i>
-                Masuk
+            <button type="submit" class="btn-pill w-100 py-3 mt-2" id="btnLogin">
+                Masuk ke Dasbor
             </button>
         </form>
 
         <!-- Info akun default -->
-        <div class="mt-4 p-3 rounded-3" style="background:#f8fafc;border:1px dashed #cbd5e1;">
-            <p class="mb-1 text-muted" style="font-size:0.78rem;font-weight:600;">
+        <div class="mt-5 p-3 rounded-md" style="background:var(--block-cream); border:1px solid var(--hairline);">
+            <p class="mb-1 text-dark eyebrow">
                 <i class="bi bi-info-circle me-1"></i> AKUN DEMO
             </p>
-            <p class="mb-0" style="font-size:0.78rem;color:#475569;">
+            <p class="mb-0 fs-6 text-dark">
                 Username: <code>admin</code> &nbsp;|&nbsp; Password: <code>admin123</code>
             </p>
         </div>
 
         <p class="text-center text-muted mt-4 mb-0" style="font-size:0.75rem;">
-            &copy; <?= date('Y') ?> SM Sport Center — Studi Kasus Sertifikasi Analis Program
+            &copy; <?= date('Y') ?> SM Sport Center
         </p>
     </div>
 </div>

@@ -123,11 +123,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
                 <div class="col-md-4 mt-3 mt-md-0">
                     <label class="form-label fw-semibold">Jam Mulai</label>
-                    <input type="time" name="jam_mulai" id="jam_mulai" class="form-control" value="<?= htmlspecialchars(substr($data['jam_mulai'],0,5)) ?>" required onchange="hitungTotal()">
+                    <select name="jam_mulai" id="jam_mulai" class="form-select" required onchange="hitungTotal()">
+                        <?php 
+                        $val_mulai = substr($data['jam_mulai'],0,5);
+                        for ($h = 8; $h <= 22; $h++) {
+                            foreach (['00', '30'] as $m) {
+                                $t = sprintf('%02d:%s', $h, $m);
+                                $sel = ($val_mulai == $t) ? 'selected' : '';
+                                echo "<option value=\"$t\" $sel>$t WIB</option>";
+                            }
+                        }
+                        ?>
+                    </select>
                 </div>
                 <div class="col-md-4 mt-3 mt-md-0">
                     <label class="form-label fw-semibold">Jam Selesai</label>
-                    <input type="time" name="jam_selesai" id="jam_selesai" class="form-control" value="<?= htmlspecialchars(substr($data['jam_selesai'],0,5)) ?>" required onchange="hitungTotal()">
+                    <select name="jam_selesai" id="jam_selesai" class="form-select" required onchange="hitungTotal()">
+                        <?php 
+                        $val_selesai = substr($data['jam_selesai'],0,5);
+                        for ($h = 8; $h <= 23; $h++) {
+                            foreach (['00', '30'] as $m) {
+                                if ($h == 23 && $m == '30') continue;
+                                if ($h == 8 && $m == '00') continue;
+                                $t = sprintf('%02d:%s', $h, $m);
+                                $sel = ($val_selesai == $t) ? 'selected' : '';
+                                echo "<option value=\"$t\" $sel>$t WIB</option>";
+                            }
+                        }
+                        ?>
+                    </select>
                 </div>
             </div>
 

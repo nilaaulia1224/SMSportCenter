@@ -22,7 +22,7 @@ if ($is_pelanggan || $is_lapangan || $is_reservasi || $is_laporan) {
 }
 ?>
 <!-- Sidebar -->
-<nav id="sidebar" class="bg-dark text-white border-end shadow-sm">
+<nav id="sidebar" class="text-white border-end shadow-sm">
     <div class="sidebar-header p-4 border-bottom border-secondary d-flex align-items-center">
         <i class="bi bi-trophy-fill text-warning fs-3 me-2"></i>
         <div>
