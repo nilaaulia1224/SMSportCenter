@@ -22,7 +22,7 @@ $pelanggan = $stmt->fetchAll();
 
 <div class="page-header d-flex justify-content-between align-items-center">
     <div>
-        <h4><i class="bi bi-people-fill me-2 text-primary"></i>Manajemen Pelanggan</h4>
+        <h4><i class="bi bi-people-fill me-2 text-primary"></i>Manajemen Pelanggan Baru</h4>
         <p class="text-muted mb-0">Kelola data pendaftar dan member</p>
     </div>
     <a href="tambah.php" class="btn btn-primary">
